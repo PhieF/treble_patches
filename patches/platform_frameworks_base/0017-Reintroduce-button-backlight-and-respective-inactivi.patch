@@ -18,6 +18,15 @@ diff --git a/services/core/java/com/android/server/power/PowerManagerService.jav
 index e5458292c0f..75bb06c6b37 100644
 --- a/services/core/java/com/android/server/power/PowerManagerService.java
 +++ b/services/core/java/com/android/server/power/PowerManagerService.java
+@@ -165,7 +165,7 @@ public final class PowerManagerService extends SystemService
+     private static final int DIRTY_QUIESCENT = 1 << 12;
+     // Dirty bit: VR Mode enabled changed
+     private static final int DIRTY_VR_MODE_CHANGED = 1 << 13;
+-
++    private static final int BUTTON_ON_DURATION = 5 * 1000;
+     // Summarizes the state of all active wakelocks.
+     private static final int WAKE_LOCK_CPU = 1 << 0;
+     private static final int WAKE_LOCK_SCREEN_BRIGHT = 1 << 1;
 @@ -2071,7 +2071,13 @@ public final class PowerManagerService extends SystemService
                      nextTimeout = mLastUserActivityTime
                              + screenOffTimeout - screenDimDuration;

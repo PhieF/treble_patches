@@ -27,7 +27,7 @@ index 2c5b8568515..77a543ffa7b 100644
 -        // We must base this on the parent configuration, because we set our override
 +        if(info.applicationInfo.targetSdkVersion < O) {
 +            try {
-+                maxAspectRatio = Float.parseFloat(SystemProperties.get("persist.sys.max_aspect_ratio.pre_o", ""));
++                maxAspectRatio = Float.parseFloat(android.os.SystemProperties.get("persist.sys.max_aspect_ratio.pre_o", ""));
 +            } catch (Throwable t) {}
 +            Log.d("PHH", "Overrode aspect ratio because pre-o to " + maxAspectRatio);
 +        }
