@@ -1,0 +1,38 @@
+From 0e890665886445d9947e16efe204cd596603205f Mon Sep 17 00:00:00 2001
+From: Zadkiel <hello@zadkiel.fr>
+Date: Fri, 30 Nov 2018 15:26:15 +0100
+Subject: [PATCH] build/soong/Android.bp: Disable generated_kernel_*
+
+---
+ build/soong/Android.bp | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/build/soong/Android.bp b/build/soong/Android.bp
+index 382b68ee9..f9108a8b9 100644
+--- a/build/soong/Android.bp
++++ b/build/soong/Android.bp
+@@ -23,24 +23,3 @@ bootstrap_go_package {
+     ],
+     pluginFor: ["soong_build"],
+ }
+-
+-lineage_generator {
+-    name: "generated_kernel_includes",
+-
+-    // The headers make command
+-    cmd: "make $(KERNEL_MAKE_FLAGS) -C $(TARGET_KERNEL_SOURCE) O=$(genDir) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) headers_install",
+-
+-    // Directories that can be imported by a cc_* module generated_headers property
+-    export_include_dirs: ["usr/include", "usr/techpack/audio/include"],
+-
+-    // Sources for dependency tracking
+-    dep_root: "$(TARGET_KERNEL_SOURCE)",
+-    dep_files: [ "Makefile", "include/**/*", "arch/$(KERNEL_ARCH)/include/**/*", "techpack/audio/include/**/*"],
+-}
+-
+-cc_library_headers {
+-    name: "generated_kernel_headers",
+-    generated_headers: ["generated_kernel_includes"],
+-    export_generated_headers: ["generated_kernel_includes"],
+-    vendor_available: true,
+-}
