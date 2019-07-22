@@ -19,7 +19,7 @@ index 5698fb3..d5fd2f1 100644
  
  cc_library_shared {
      name: "libcryptfs_hw",
--    header_libs: ["qseecom-kernel-headers",
+-    header_libs: ["generated_kernel_headers",
 -                  "libhardware_headers"],
 +    header_libs: ["libhardware_headers"],
      cflags: ["-DCONFIG_HW_DISK_ENCRYPTION"],

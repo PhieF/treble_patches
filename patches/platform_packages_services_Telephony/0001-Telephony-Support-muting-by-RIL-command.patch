@@ -22,7 +22,7 @@ index 675424a76..f6c03a6aa 100644
          if (getPhone() != null) {
              getPhone().setEchoSuppressionEnabled();
 -            if (!mSendMicMuteToAudioManager) {
-+            if (!mSendMicMuteToAudioManager && SystemProperties.getBoolean("persist.sys.radio.huawei", false)) {
++            if (!mSendMicMuteToAudioManager && android.os.SystemProperties.getBoolean("persist.sys.radio.huawei", false)) {
                  getPhone().setMute(audioState.isMuted());
              }
          }

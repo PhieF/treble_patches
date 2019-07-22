@@ -59,7 +59,6 @@ index afd1a94bf50..22be0ead478 100644
              }
              result |= true; // we have a valid fingerprint, done
              resetFailedAttempts();
-+                     }
              onStop();
          }
 +        if(result == true) mFacola.hide();
