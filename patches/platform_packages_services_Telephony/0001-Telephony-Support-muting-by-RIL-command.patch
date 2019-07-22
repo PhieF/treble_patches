@@ -14,28 +14,15 @@ Change-Id: Id916dec2574d6e57b6f809fbaf2b0959c0cc7256
  1 file changed, 5 insertions(+)
 
 diff --git a/src/com/android/services/telephony/TelephonyConnection.java b/src/com/android/services/telephony/TelephonyConnection.java
-index db4cc1018..03f0cee57 100644
+index 675424a76..f6c03a6aa 100644
 --- a/src/com/android/services/telephony/TelephonyConnection.java
 +++ b/src/com/android/services/telephony/TelephonyConnection.java
-@@ -25,6 +25,7 @@ import android.os.Handler;
- import android.os.Looper;
- import android.os.Message;
- import android.os.PersistableBundle;
-+import android.os.SystemProperties;
- import android.telecom.CallAudioState;
- import android.telecom.ConferenceParticipant;
- import android.telecom.Connection;
-@@ -697,6 +698,10 @@ abstract class TelephonyConnection extends Connection implements Holdable {
+@@ -705,7 +705,7 @@ abstract class TelephonyConnection extends Connection implements Holdable {
          // TODO: update TTY mode.
          if (getPhone() != null) {
              getPhone().setEchoSuppressionEnabled();
-+
-+        if (SystemProperties.getBoolean("persist.sys.radio.huawei", false)) {
-+                getPhone().setMute(audioState.isMuted());
-+            }
+-            if (!mSendMicMuteToAudioManager) {
++            if (!mSendMicMuteToAudioManager && SystemProperties.getBoolean("persist.sys.radio.huawei", false)) {
+                 getPhone().setMute(audioState.isMuted());
+             }
          }
-     }
- 
--- 
-2.17.1
-
