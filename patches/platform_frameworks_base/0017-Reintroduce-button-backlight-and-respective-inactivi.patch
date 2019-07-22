@@ -35,7 +35,6 @@ index e5458292c0f..75bb06c6b37 100644
 +                       if (now > mLastUserActivityTime + BUTTON_ON_DURATION) {
 +                            mButtonsLight.setBrightness(0);
 +                        } else {
-+                            mButtonsLight.setBrightness(screenBrightness);
 +                            nextTimeout = now + BUTTON_ON_DURATION;
 +                        }
 +			    mUserActivitySummary = USER_ACTIVITY_SCREEN_BRIGHT;
