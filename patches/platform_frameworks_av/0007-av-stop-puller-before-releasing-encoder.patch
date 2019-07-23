@@ -1,7 +1,7 @@
-From 418eb59ca5295e62ac753490404df7311e385c4f Mon Sep 17 00:00:00 2001
+From 33b404d93157590830624b635bfbd8eb418ba7e9 Mon Sep 17 00:00:00 2001
 From: Aniket Kumar Lata <alata@quicinc.com>
 Date: Fri, 18 Jan 2019 17:04:01 -0800
-Subject: [PATCH 3/4] av: stop puller before releasing encoder
+Subject: [PATCH 7/8] av: stop puller before releasing encoder
 
 When encoder is released, it will no longer turn to media codec source
 for fill-this-buffer. Hence, the buffer queue within puller will not be

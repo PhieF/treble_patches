@@ -1,7 +1,7 @@
-From 670572c432e8e54e7e05c80dfdb13c73fcd0d94d Mon Sep 17 00:00:00 2001
+From 58575b9096b06eafe8ab5b18f0a03e8ea6906764 Mon Sep 17 00:00:00 2001
 From: melvin xu <melvin.xu@spreadtrum.com>
 Date: Tue, 18 Dec 2018 13:15:08 +0800
-Subject: [PATCH 4/4] DO NOT MERGE: add color converter for NV12 to RGB
+Subject: [PATCH 8/8] DO NOT MERGE: add color converter for NV12 to RGB
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

@@ -1,14 +1,14 @@
-From b2c2b9cb96329710a39c6905004012f96a1c7b98 Mon Sep 17 00:00:00 2001
+From 5f8936a6da7abf38d13b5c228c81e31897ba4241 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 24 Mar 2018 08:01:48 +0100
-Subject: [PATCH 01/24] Fix backlight control on Galaxy S9(+)
+Subject: [PATCH 01/34] Fix backlight control on Galaxy S9(+)
 
 ---
- services/core/java/com/android/server/lights/LightsService.java | 7 +++++++
+ .../core/java/com/android/server/lights/LightsService.java | 7 +++++++
  1 file changed, 7 insertions(+)
 
 diff --git a/services/core/java/com/android/server/lights/LightsService.java b/services/core/java/com/android/server/lights/LightsService.java
-index a94ed60..762b0ae 100644
+index a94ed608b9c..762b0ae4037 100644
 --- a/services/core/java/com/android/server/lights/LightsService.java
 +++ b/services/core/java/com/android/server/lights/LightsService.java
 @@ -21,6 +21,7 @@ import android.app.ActivityManager;
@@ -33,5 +33,5 @@ index a94ed60..762b0ae 100644
                  color = 0xff000000 | (color << 16) | (color << 8) | color;
                  setLightLocked(color, LIGHT_FLASH_NONE, 0, 0, brightnessMode);
 -- 
-2.7.4
+2.17.1
 

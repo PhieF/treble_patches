@@ -1,7 +1,7 @@
-From 8bffb143efa09e8c5620002ac3411142675aee2a Mon Sep 17 00:00:00 2001
+From 76e2349d1773cf8d4016eb443a9e11d407e67369 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 9 Dec 2018 15:56:59 +0100
-Subject: [PATCH 2/4] Revert "Set rlimit rtprio for cameraserver"
+Subject: [PATCH 6/8] Revert "Set rlimit rtprio for cameraserver"
 
 This reverts commit 4ae244cab4fe715fc2729e906b7dda3075fbbac3.
 

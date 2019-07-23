@@ -1,7 +1,7 @@
-From f00119ddc6e9873712a994795de3274482dc1b0e Mon Sep 17 00:00:00 2001
+From 9cdd63b358aa36d3c8ce39cc2c7f8970d3ed9bcf Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 6 May 2019 23:16:43 +0200
-Subject: [PATCH] Delay brightness changes, so that dim adjusted
+Subject: [PATCH 31/34] Delay brightness changes, so that dim adjusted
 
 ---
  .../server/fingerprint/FacolaView.java        | 28 +++++++++++++++++--
@@ -11,7 +11,7 @@ diff --git a/services/core/java/com/android/server/fingerprint/FacolaView.java b
 index ec336fe337c..86f03360ad0 100644
 --- a/services/core/java/com/android/server/fingerprint/FacolaView.java
 +++ b/services/core/java/com/android/server/fingerprint/FacolaView.java
-@@ -29,6 +29,8 @@
+@@ -29,6 +29,8 @@ import android.util.Slog;
  import android.view.WindowManager;
  import android.graphics.PixelFormat;
  import android.view.Gravity;
@@ -20,7 +20,7 @@ index ec336fe337c..86f03360ad0 100644
  
  import java.io.PrintWriter;
  
-@@ -47,10 +49,15 @@
+@@ -47,10 +49,15 @@ public class FacolaView extends ImageView implements OnTouchListener {
      private final static float UNTOUCHED_DIM = .1f;
      private final static float TOUCHED_DIM = .9f;
  
@@ -36,7 +36,7 @@ index ec336fe337c..86f03360ad0 100644
          String[] location = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y", "").split(",");
          String[] size = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.size.width_height", "").split(",");
          if(size.length == 2 && location.length == 2) {
-@@ -89,8 +96,13 @@ protected void onDraw(Canvas canvas) {
+@@ -89,8 +96,13 @@ public class FacolaView extends ImageView implements OnTouchListener {
          if(mInsideCircle) {
              try {
                  int nitValue = 3;
@@ -52,7 +52,7 @@ index ec336fe337c..86f03360ad0 100644
              } catch(Exception e) {
                  Slog.d("PHH-Enroll", "Failed calling xiaomi fp extcmd");
              }
-@@ -123,8 +135,15 @@ public boolean onTouch(View v, MotionEvent event) {
+@@ -123,8 +135,15 @@ public class FacolaView extends ImageView implements OnTouchListener {
          invalidate();
  
          if(!mInsideCircle) {
@@ -69,7 +69,7 @@ index ec336fe337c..86f03360ad0 100644
              mWM.updateViewLayout(this, mParams);
              return false;
          }
-@@ -133,6 +152,7 @@ public boolean onTouch(View v, MotionEvent event) {
+@@ -133,6 +152,7 @@ public class FacolaView extends ImageView implements OnTouchListener {
          mParams.screenBrightness = 1.0f;
          mWM.updateViewLayout(this, mParams);
  
@@ -77,7 +77,7 @@ index ec336fe337c..86f03360ad0 100644
          return true;
      }
  
-@@ -166,6 +186,7 @@ public void show() {
+@@ -166,6 +186,7 @@ public class FacolaView extends ImageView implements OnTouchListener {
  
          mParams.gravity = Gravity.TOP | Gravity.LEFT;
          mWM.addView(this, mParams);
@@ -85,11 +85,13 @@ index ec336fe337c..86f03360ad0 100644
  
      }
  
-@@ -188,5 +209,6 @@ public void hide() {
+@@ -188,5 +209,6 @@ public class FacolaView extends ImageView implements OnTouchListener {
  
          Slog.d("PHH-Enroll", "Removed facola");
          mWM.removeView(this);
 +        visible = false;
      }
  }
+-- 
+2.17.1
 

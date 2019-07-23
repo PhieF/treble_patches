@@ -1,7 +1,7 @@
-From 5e0dc919ba8a665582c3478c5c018fd73b7da24b Mon Sep 17 00:00:00 2001
+From 15e9abc400ea6c0023526ab5d7901042907ad310 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sun, 24 Mar 2019 22:48:39 +0100
-Subject: [PATCH] Initial support of in-display fingerprint sensor
+Subject: [PATCH 28/34] Initial support of in-display fingerprint sensor
 
 Tested on Mi 9.
 Here are the list of things that are device-specific:
@@ -18,21 +18,19 @@ ready, and what is its brightness)
  create mode 100644 services/core/java/com/android/server/fingerprint/FacolaView.java
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 48be3c4921c..46f6035fb74 100644
+index 8da6d1e48ff..affa0b81a66 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -44,7 +44,8 @@ java_library_static {
+@@ -43,6 +43,7 @@ java_library_static {
          "android.hardware.vibrator-V1.0-java",
          "android.hardware.configstore-V1.0-java",
          "android.hardware.contexthub-V1.0-java",
--        "vendor.lineage.trust-V1.0-java",
 +        "vendor.xiaomi.hardware.fingerprintextension-V1.0-java",
-+	"vendor.lineage.trust-V1.0-java",
      ],
  }
  
 diff --git a/services/core/java/com/android/server/fingerprint/AuthenticationClient.java b/services/core/java/com/android/server/fingerprint/AuthenticationClient.java
-index afd1a94bf50..22be0ead478 100644
+index afd1a94bf50..f36ed9b38c6 100644
 --- a/services/core/java/com/android/server/fingerprint/AuthenticationClient.java
 +++ b/services/core/java/com/android/server/fingerprint/AuthenticationClient.java
 @@ -54,6 +54,8 @@ public abstract class AuthenticationClient extends ClientMonitor {
@@ -44,20 +42,15 @@ index afd1a94bf50..22be0ead478 100644
      // Receives events from SystemUI and handles them before forwarding them to FingerprintDialog
      protected IBiometricPromptReceiver mDialogReceiver = new IBiometricPromptReceiver.Stub() {
          @Override // binder call
-@@ -94,8 +96,10 @@ public abstract class AuthenticationClient extends ClientMonitor {
-         mBundle = bundle;
-         mDialogReceiverFromClient = dialogReceiver;
+@@ -96,6 +98,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
          mStatusBarService = statusBarService;
-+                         .getSystemService(Context.FINGERPRINT_SERVICE);
          mFingerprintManager = (FingerprintManager) getContext()
                  .getSystemService(Context.FINGERPRINT_SERVICE);
 +        mFacola = new FacolaView(context);
      }
  
      @Override
-@@ -231,8 +235,10 @@ public abstract class AuthenticationClient extends ClientMonitor {
-             }
-             result |= true; // we have a valid fingerprint, done
+@@ -233,6 +236,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
              resetFailedAttempts();
              onStop();
          }
@@ -65,7 +58,7 @@ index afd1a94bf50..22be0ead478 100644
          return result;
      }
  
-@@ -246,6 +252,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
+@@ -246,6 +250,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
              Slog.w(TAG, "start authentication: no fingerprint HAL!");
              return ERROR_ESRCH;
          }
@@ -73,20 +66,24 @@ index afd1a94bf50..22be0ead478 100644
          onStart();
          try {
              final int result = daemon.authenticate(mOpId, getGroupId());
-@@ -278,7 +285,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
-             Slog.w(TAG, "stopAuthentication: already cancelled!");
+@@ -279,6 +284,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
              return 0;
          }
--
+ 
 +        mFacola.hide();
          onStop();
          IBiometricsFingerprint daemon = getFingerprintDaemon();
          if (daemon == null) {
 diff --git a/services/core/java/com/android/server/fingerprint/EnrollClient.java b/services/core/java/com/android/server/fingerprint/EnrollClient.java
-index c9efcf2fd68..770faa073c4 100644
+index c9efcf2fd68..4ce4ba0cfc8 100644
 --- a/services/core/java/com/android/server/fingerprint/EnrollClient.java
 +++ b/services/core/java/com/android/server/fingerprint/EnrollClient.java
-@@ -33,6 +33,7 @@ import java.util.Arrays;
+@@ -29,10 +29,12 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+ 
+ import java.util.Arrays;
+ 
++
+ /**
   * A class to keep track of the enrollment state for a given client.
   */
  public abstract class EnrollClient extends ClientMonitor {
@@ -94,7 +91,7 @@ index c9efcf2fd68..770faa073c4 100644
      private static final long MS_PER_SEC = 1000;
      private static final int ENROLLMENT_TIMEOUT_MS = 60 * 1000; // 1 minute
      private byte[] mCryptoToken;
-@@ -42,6 +43,7 @@ public abstract class EnrollClient extends ClientMonitor {
+@@ -42,6 +44,7 @@ public abstract class EnrollClient extends ClientMonitor {
              boolean restricted, String owner) {
          super(context, halDeviceId, token, receiver, userId, groupId, restricted, owner);
          mCryptoToken = Arrays.copyOf(cryptoToken, cryptoToken.length);
@@ -102,7 +99,7 @@ index c9efcf2fd68..770faa073c4 100644
      }
  
      @Override
-@@ -69,6 +71,7 @@ public abstract class EnrollClient extends ClientMonitor {
+@@ -69,6 +72,7 @@ public abstract class EnrollClient extends ClientMonitor {
          MetricsLogger.action(getContext(), MetricsEvent.ACTION_FINGERPRINT_ENROLL);
          try {
              receiver.onEnrollResult(getHalDeviceId(), fpId, groupId, remaining);
@@ -110,7 +107,7 @@ index c9efcf2fd68..770faa073c4 100644
              return remaining == 0;
          } catch (RemoteException e) {
              Slog.w(TAG, "Failed to notify EnrollResult:", e);
-@@ -83,6 +86,11 @@ public abstract class EnrollClient extends ClientMonitor {
+@@ -83,6 +87,10 @@ public abstract class EnrollClient extends ClientMonitor {
              Slog.w(TAG, "enroll: no fingerprint HAL!");
              return ERROR_ESRCH;
          }
@@ -118,10 +115,17 @@ index c9efcf2fd68..770faa073c4 100644
 +
 +        mFacola.show();
 +
-+
          final int timeout = (int) (ENROLLMENT_TIMEOUT_MS / MS_PER_SEC);
          try {
              final int result = daemon.enroll(mCryptoToken, getGroupId(), timeout);
+@@ -104,6 +112,7 @@ public abstract class EnrollClient extends ClientMonitor {
+             Slog.w(TAG, "stopEnroll: already cancelled!");
+             return 0;
+         }
++        mFacola.hide();
+         IBiometricsFingerprint daemon = getFingerprintDaemon();
+         if (daemon == null) {
+             Slog.w(TAG, "stopEnrollment: no fingerprint HAL!");
 diff --git a/services/core/java/com/android/server/fingerprint/FacolaView.java b/services/core/java/com/android/server/fingerprint/FacolaView.java
 new file mode 100644
 index 00000000000..ec336fe337c
@@ -320,3 +324,6 @@ index 00000000000..ec336fe337c
 +        mWM.removeView(this);
 +    }
 +}
+-- 
+2.17.1
+

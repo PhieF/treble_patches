@@ -1,7 +1,7 @@
 From 34a2e6145c9264a25f6c8b8f9bd966fe662d3e10 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 9 Apr 2019 08:50:45 +0200
-Subject: [PATCH] If we do a free() on it, it means it is heap-allocated
+Subject: [PATCH 4/4] If we do a free() on it, it means it is heap-allocated
 
 ---
  libselinux/src/label_backends_android.c | 4 ++--

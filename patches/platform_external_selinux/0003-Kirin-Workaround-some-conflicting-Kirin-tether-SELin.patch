@@ -1,8 +1,8 @@
 From e8790f87dd3498d95e82e091ab6929c0a89b2822 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 3 Dec 2018 20:54:54 +0100
-Subject: [PATCH] ::Kirin:: Workaround some conflicting Kirin tether SELinux
- context
+Subject: [PATCH 3/4] ::Kirin:: Workaround some conflicting Kirin tether
+ SELinux context
 
 Some Kirin devices declared some android.hardware.tetheroffload HALs,
 but they didn't use AOSP contexts.

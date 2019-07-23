@@ -1,15 +1,15 @@
-From 247c7ff4d9a34ee7408a12337de390961e4b5807 Mon Sep 17 00:00:00 2001
+From 5413f2a20f34c284305fe5d7217fa0674beb7278 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 2 Jul 2018 23:36:39 +0200
-Subject: [PATCH 12/24] [Galaxy S9] "remaining" of HAL onEnroll is actually a
+Subject: [PATCH 12/34] [Galaxy S9] "remaining" of HAL onEnroll is actually a
  percent of progress
 
 ---
- .../java/com/android/server/fingerprint/FingerprintService.java     | 6 +++++-
+ .../com/android/server/fingerprint/FingerprintService.java  | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/java/com/android/server/fingerprint/FingerprintService.java b/services/core/java/com/android/server/fingerprint/FingerprintService.java
-index 06329e57..6f09433 100644
+index 06329e571b4..6f09433c002 100644
 --- a/services/core/java/com/android/server/fingerprint/FingerprintService.java
 +++ b/services/core/java/com/android/server/fingerprint/FingerprintService.java
 @@ -1046,7 +1046,11 @@ public class FingerprintService extends SystemService implements IHwBinder.Death
@@ -26,5 +26,5 @@ index 06329e57..6f09433 100644
              });
          }
 -- 
-2.7.4
+2.17.1
 

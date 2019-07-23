@@ -1,7 +1,7 @@
-From 7fed750fff5a65329a32b851c46d3aaa856b2bed Mon Sep 17 00:00:00 2001
+From 0796d3cb843a28091d45dbf1cde2a9afd554aca8 Mon Sep 17 00:00:00 2001
 From: Jerry Zhang <zhangjerry@google.com>
 Date: Wed, 6 Jun 2018 11:04:46 -0700
-Subject: [PATCH] Check for null path in getInternalPathForUser
+Subject: [PATCH 32/34] Check for null path in getInternalPathForUser
 
 In some situations, path could be null resulting
 in a crash.
@@ -20,7 +20,7 @@ diff --git a/core/java/android/os/storage/VolumeInfo.java b/core/java/android/os
 index 8d4c3c3d3e6..8c7750242ef 100644
 --- a/core/java/android/os/storage/VolumeInfo.java
 +++ b/core/java/android/os/storage/VolumeInfo.java
-@@ -312,7 +312,9 @@ public File getPathForUser(int userId) {
+@@ -312,7 +312,9 @@ public class VolumeInfo implements Parcelable {
       * {@link android.Manifest.permission#WRITE_MEDIA_STORAGE}.
       */
      public File getInternalPathForUser(int userId) {
@@ -31,4 +31,6 @@ index 8d4c3c3d3e6..8c7750242ef 100644
              // TODO: plumb through cleaner path from vold
              return new File(path.replace("/storage/", "/mnt/media_rw/"));
          } else {
+-- 
+2.17.1
 

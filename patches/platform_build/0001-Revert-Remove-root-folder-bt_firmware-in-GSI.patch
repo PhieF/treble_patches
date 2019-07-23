@@ -1,4 +1,4 @@
-From 70b81271bf7e27121ecb982aeb568e1eaf920b52 Mon Sep 17 00:00:00 2001
+From 63d39d4cad3d67e1bbda9ed5b10c6d512fef0345 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Tue, 27 Mar 2018 23:26:49 +0200
 Subject: [PATCH 1/2] Revert "Remove root folder bt_firmware in GSI"
@@ -13,7 +13,7 @@ Essential 8.1 firmware requires this
  3 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/target/board/generic_arm64_ab/BoardConfig.mk b/target/board/generic_arm64_ab/BoardConfig.mk
-index 88b90a8fb..b67c3b31d 100644
+index fc6b58284..820019676 100644
 --- a/target/board/generic_arm64_ab/BoardConfig.mk
 +++ b/target/board/generic_arm64_ab/BoardConfig.mk
 @@ -33,7 +33,7 @@ TARGET_NO_RECOVERY := true
@@ -22,27 +22,32 @@ index 88b90a8fb..b67c3b31d 100644
  # TODO(jiyong) These might be SoC specific.
 -BOARD_ROOT_EXTRA_FOLDERS += firmware firmware/radio persist
 +BOARD_ROOT_EXTRA_FOLDERS += bt_firmware firmware firmware/radio persist
- BOARD_ROOT_EXTRA_SYMLINKS += /vendor/lib/dsp:/dsp
- BOARD_ROOT_EXTRA_SYMLINKS += /vendor/firmware_mnt/image:/firmware/image
- BOARD_ROOT_EXTRA_SYMLINKS += /vendor/firmware_mnt/verinfo:/firmware/verinfo
+ BOARD_ROOT_EXTRA_SYMLINKS := /vendor/lib/dsp:/dsp
+ 
+ # Set this to create /cache mount point for non-A/B devices that mounts /cache.
 diff --git a/target/board/generic_arm64_ab/sepolicy/file.te b/target/board/generic_arm64_ab/sepolicy/file.te
-index 7adfdfa4e..5f8df8ee4 100644
+index 7adfdfa4e..46455339a 100644
 --- a/target/board/generic_arm64_ab/sepolicy/file.te
 +++ b/target/board/generic_arm64_ab/sepolicy/file.te
-@@ -1,6 +1,6 @@
+@@ -1,5 +1,6 @@
  # TODO(b/36764215): remove this file when the generic system image
  # no longer has these directories
- type persist_file, file_type;
--
 +type bt_firmware_file, file_type;
+ type persist_file, file_type;
+ 
  # Default type for anything under /firmware.
- type firmware_file, fs_type, contextmount_type;
 diff --git a/target/board/generic_arm64_ab/sepolicy/file_contexts b/target/board/generic_arm64_ab/sepolicy/file_contexts
-index 0a80559e1..a8a0e7b7b 100644
+index 0a80559e1..92a4ff872 100644
 --- a/target/board/generic_arm64_ab/sepolicy/file_contexts
 +++ b/target/board/generic_arm64_ab/sepolicy/file_contexts
-@@ -10,3 +10,4 @@
+@@ -2,6 +2,7 @@
+ # no longer has these directories. They are specific to QCOM.
  
- # files in firmware
- /firmware(/.*)?         u:object_r:firmware_file:s0
+ # /
 +/bt_firmware(/.*)?      u:object_r:bt_firmware_file:s0
+ /tombstones             u:object_r:rootfs:s0
+ /dsp                    u:object_r:rootfs:s0
+ 
+-- 
+2.17.1
+

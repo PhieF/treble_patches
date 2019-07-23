@@ -1,7 +1,7 @@
 From 34e17b78f581b73cde6e829a6fb5973ece02155e Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Fri, 28 Dec 2018 13:06:32 +0100
-Subject: [PATCH] Make MAX_CONNECTIONS_GSM settable from property
+Subject: [PATCH 4/7] Make MAX_CONNECTIONS_GSM settable from property
 
 cf https://github.com/phhusson/treble_experimentations/issues/110
 
@@ -14,7 +14,7 @@ diff --git a/src/java/com/android/internal/telephony/GsmCdmaCallTracker.java b/s
 index f4c561c29..b42caf47c 100755
 --- a/src/java/com/android/internal/telephony/GsmCdmaCallTracker.java
 +++ b/src/java/com/android/internal/telephony/GsmCdmaCallTracker.java
-@@ -62,7 +62,7 @@
+@@ -62,7 +62,7 @@ public class GsmCdmaCallTracker extends CallTracker {
  
      //***** Constants
  
@@ -23,4 +23,6 @@ index f4c561c29..b42caf47c 100755
      private static final int MAX_CONNECTIONS_PER_CALL_GSM = 5; //only 5 connections allowed per call
  
      private static final int MAX_CONNECTIONS_CDMA = 8;
+-- 
+2.17.1
 
