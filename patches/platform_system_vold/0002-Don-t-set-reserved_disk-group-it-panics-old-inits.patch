@@ -6,16 +6,14 @@ Subject: [PATCH 2/5] Don't set reserved_disk group, it panics old inits
 ---
  vold.rc | 1 -
  1 file changed, 1 deletion(-)
-
 diff --git a/vold.rc b/vold.rc
-index 7d14453..c27aeda 100644
+index 93d8786..ef7b52e 100644
 --- a/vold.rc
 +++ b/vold.rc
-@@ -5,4 +5,3 @@ service vold /system/bin/vold \
+@@ -5,4 +5,4 @@ service vold /system/bin/vold \
      ioprio be 2
      writepid /dev/cpuset/foreground/tasks
      shutdown critical
--    group reserved_disk
--- 
-2.17.1
+-    group root reserved_disk
++    group root
 
